@@ -32,3 +32,43 @@ lint: install-lint-deps
 	golangci-lint run ./...
 
 .PHONY: build run build-img run-img version test lint
+
+PHONY: generate
+generate:
+		mkdir -p pkg/event_v1
+		protoc.exe --proto_path vendor.protogen --proto_path api/event_v1 \
+                   				--go_out=pkg/event_v1 --go_opt=paths=import \
+                   				--go-grpc_out=pkg/event_v1 --go-grpc_opt=paths=import \
+								--grpc-gateway_out=pkg/event_v1 \
+								--grpc-gateway_opt=logtostderr=true \
+								--grpc-gateway_opt=paths=import \
+								--validate_out lang=go:pkg/event_v1 \
+								--swagger_out=allow_merge=true,merge_file_name=api:pkg/event_v1 \
+                   				api/event_v1/EventService_v1.proto
+		mv pkg/event_v1/github.com/antondoinikov/calendar-server/pkg/event_v1/* pkg/event_v1/
+		rm -rf pkg/event_v1/github.com/
+
+PHONY: vendor-proto
+vendor-proto: .vendor-proto
+
+PHONY: .vendor-proto
+.vendor-proto:
+		@if [ ! -d vendor.protogen/google ]; then \
+			git clone https://github.com/googleapis/googleapis vendor.protogen/googleapis &&\
+			mkdir -p  vendor.protogen/google/ &&\
+			mv vendor.protogen/googleapis/google/api vendor.protogen/google &&\
+			rm -rf vendor.protogen/googleapis ;\
+		fi
+		@if [ ! -d vendor.protogen/github.com/envoyproxy ]; then \
+			mkdir -p vendor.protogen/validate &&\
+			git clone https://github.com/envoyproxy/protoc-gen-validate vendor.protogen/protoc-gen-validate &&\
+			mv vendor.protogen/protoc-gen-validate/validate/*.proto vendor.protogen/validate &&\
+			rm -rf vendor.protogen/protoc-gen-validate ;\
+		fi
+		@if [ ! -d vendor.protogen/google/protobuf ]; then \
+			git clone https://github.com/protocolbuffers/protobuf vendor.protogen/protobuf &&\
+			mkdir -p  vendor.protogen/google/protobuf &&\
+			mv vendor.protogen/protobuf/src/google/protobuf/*.proto vendor.protogen/google/protobuf &&\
+			rm -rf vendor.protogen/protobuf ;\
+		fi
+

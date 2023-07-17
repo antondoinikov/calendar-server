@@ -1,0 +1,412 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "EventService_v1.proto",
+    "version": "version not set"
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/event/v1/create": {
+      "post": {
+        "operationId": "EventV1_CreateEvent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/event_v1CreateEventResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/event_v1CreateEventRequest"
+            }
+          }
+        ],
+        "tags": [
+          "EventV1"
+        ]
+      }
+    },
+    "/event/v1/delete": {
+      "post": {
+        "operationId": "EventV1_DeleteEvent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/event_v1DeleteEventRequest"
+            }
+          }
+        ],
+        "tags": [
+          "EventV1"
+        ]
+      }
+    },
+    "/event/v1/get-list": {
+      "post": {
+        "operationId": "EventV1_GetListEvent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/event_v1GetListEventResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "properties": {}
+            }
+          }
+        ],
+        "tags": [
+          "EventV1"
+        ]
+      }
+    },
+    "/event/v1/get-list-month": {
+      "post": {
+        "operationId": "EventV1_GetListMonthEvent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/event_v1GetListMonthEventResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/event_v1GetListMonthEventRequest"
+            }
+          }
+        ],
+        "tags": [
+          "EventV1"
+        ]
+      }
+    },
+    "/event/v1/get-list-week": {
+      "post": {
+        "operationId": "EventV1_GetListWeekEvent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/event_v1GetListWeekEventResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/event_v1GetListWeekEventRequest"
+            }
+          }
+        ],
+        "tags": [
+          "EventV1"
+        ]
+      }
+    },
+    "/event/v1/update": {
+      "post": {
+        "operationId": "EventV1_UpdateEvent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/event_v1UpdateEventRequest"
+            }
+          }
+        ],
+        "tags": [
+          "EventV1"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "event_v1CreateEventRequest": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "$ref": "#/definitions/event_v1Event"
+        }
+      }
+    },
+    "event_v1CreateEventResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "event_v1DeleteEventRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "event_v1Event": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "date_event_start": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "date_event_finish": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "message_event": {
+          "type": "string"
+        },
+        "id_user": {
+          "type": "string",
+          "format": "int64"
+        },
+        "time_pre_event": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "event_v1GetListEventResponse": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/event_v1InfoEvent"
+          }
+        }
+      }
+    },
+    "event_v1GetListMonthEventRequest": {
+      "type": "object",
+      "properties": {
+        "date_start_month": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "event_v1GetListMonthEventResponse": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/event_v1InfoEvent"
+          }
+        }
+      }
+    },
+    "event_v1GetListWeekEventRequest": {
+      "type": "object",
+      "properties": {
+        "date_start_week": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "event_v1GetListWeekEventResponse": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/event_v1InfoEvent"
+          }
+        }
+      }
+    },
+    "event_v1InfoEvent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "title": {
+          "type": "string"
+        },
+        "date_event_start": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "date_event_finish": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "message_event": {
+          "type": "string"
+        },
+        "id_user": {
+          "type": "string",
+          "format": "int64"
+        },
+        "time_pre_event": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "event_v1UpdateEvent": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "date_event_start": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "date_event_finish": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "message_event": {
+          "type": "string"
+        },
+        "id_user": {
+          "type": "string",
+          "format": "int64"
+        },
+        "time_pre_event": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "event_v1UpdateEventRequest": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "$ref": "#/definitions/event_v1UpdateEvent"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "runtimeError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

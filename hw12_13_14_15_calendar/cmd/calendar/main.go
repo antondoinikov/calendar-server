@@ -1,61 +1,89 @@
 package main
 
 import (
-	"context"
 	"flag"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
+	"fmt"
+	"log"
+	"net"
+	"sync"
 
-	"github.com/fixme_my_friend/hw12_13_14_15_calendar/internal/app"
-	"github.com/fixme_my_friend/hw12_13_14_15_calendar/internal/logger"
-	internalhttp "github.com/fixme_my_friend/hw12_13_14_15_calendar/internal/server/http"
-	memorystorage "github.com/fixme_my_friend/hw12_13_14_15_calendar/internal/storage/memory"
+	"github.com/antondoinikov/calendar-server/hw12_13_14_15_calendar/internal/config"
+	"github.com/antondoinikov/calendar-server/hw12_13_14_15_calendar/internal/version"
+	grpcValidator "github.com/grpc-ecosystem/go-grpc-middleware/validator"
+	"google.golang.org/grpc"
 )
 
 var configFile string
 
 func init() {
-	flag.StringVar(&configFile, "config", "/etc/calendar/config.toml", "Path to configuration file")
+	flag.StringVar(&configFile, "config", "./configs/config.json", "Path to configuration file")
 }
 
 func main() {
-	flag.Parse()
 
+	flag.Parse()
 	if flag.Arg(0) == "version" {
-		printVersion()
+		version.PrintVersion()
 		return
 	}
 
-	config := NewConfig()
-	logg := logger.New(config.Logger.Level)
+	config, err := config.NewConfig(configFile)
+	if (err != nil) && (config == nil) {
+		log.Println("No config error: ", err)
+		return
+	}
+	fmt.Printf("Config: %s \n", *config)
+	//logg := logger.New(config.Logger.LogLevel)
 
-	storage := memorystorage.New()
-	calendar := app.New(logg, storage)
+	grpcServer := grpc.NewServer(
+		grpc.UnaryInterceptor(grpcValidator.UnaryServerInterceptor()),
+	)
 
-	server := internalhttp.NewServer(logg, calendar)
-
-	ctx, cancel := signal.NotifyContext(context.Background(),
-		syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
-	defer cancel()
+	wg := sync.WaitGroup{}
+	wg.Add(1)
 
 	go func() {
-		<-ctx.Done()
+		defer wg.Done()
 
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
-		defer cancel()
+		list, err := net.Listen("tcp", net.JoinHostPort(config.GRPC.Host, config.GRPC.Port))
+		if err != nil {
+			log.Fatalf("failed to mapping port: %s", err.Error())
+		}
 
-		if err := server.Stop(ctx); err != nil {
-			logg.Error("failed to stop http server: " + err.Error())
+		fmt.Println("GRPC server is running on port: ", config.GRPC.Port)
+
+		if err := grpcServer.Serve(list); err != nil {
+			log.Fatalf("failed the serve: %s", err.Error())
+			return
 		}
 	}()
 
-	logg.Info("calendar is running...")
-
-	if err := server.Start(ctx); err != nil {
-		logg.Error("failed to start http server: " + err.Error())
-		cancel()
-		os.Exit(1) //nolint:gocritic
-	}
+	wg.Wait()
+	//storage := memorystorage.New()
+	//calendar := app.New(logg, storage)
+	//
+	//server := internalhttp.NewServer(logg, calendar)
+	//
+	//ctx, cancel := signal.NotifyContext(context.Background(),
+	//	syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
+	//defer cancel()
+	//
+	//go func() {
+	//	<-ctx.Done()
+	//
+	//	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	//	defer cancel()
+	//
+	//	if err := server.Stop(ctx); err != nil {
+	//		logg.Error("failed to stop http server: " + err.Error())
+	//	}
+	//}()
+	//
+	//logg.Info("calendar is running...")
+	//
+	//if err := server.Start(ctx); err != nil {
+	//	logg.Error("failed to start http server: " + err.Error())
+	//	cancel()
+	//	os.Exit(1) //nolint:gocritic
+	//}
 }

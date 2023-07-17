@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package event_v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option go_package = "github.com/antondoinikov/calendar-server/pkg/event_v1";
+
+service EventV1{
+  rpc CreateEvent (CreateEventRequest) returns (CreateEventResponse){
+      option(google.api.http) = {
+        post: "/event/v1/create"
+        body: "*"
+      };
+  }
+  rpc UpdateEvent (UpdateEventRequest) returns (google.protobuf.Empty){
+    option(google.api.http) = {
+      post: "/event/v1/update"
+      body: "*"
+    };
+  }
+  rpc DeleteEvent (DeleteEventRequest) returns (google.protobuf.Empty){
+    option(google.api.http) = {
+      post: "/event/v1/delete"
+      body: "*"
+    };
+  }
+  rpc GetListEvent (google.protobuf.Empty) returns (GetListEventResponse){
+    option(google.api.http) = {
+      post: "/event/v1/get-list"
+      body: "*"
+    };
+  }
+  rpc GetListWeekEvent (GetListWeekEventRequest) returns (GetListWeekEventResponse){
+    option(google.api.http) = {
+      post: "/event/v1/get-list-week"
+      body: "*"
+    };
+  }
+  rpc GetListMonthEvent (GetListMonthEventRequest) returns (GetListMonthEventResponse){
+    option(google.api.http) = {
+      post: "/event/v1/get-list-month"
+      body: "*"
+    };
+  }
+}
+
+message Event {
+    string  title = 1;
+    google.protobuf.Timestamp date_event_start = 2;
+    google.protobuf.Timestamp date_event_finish = 3;
+    string message_event = 4;
+    int64 id_user = 5;
+    google.protobuf.Timestamp time_pre_event = 6;
+}
+
+message UpdateEvent{
+  google.protobuf.StringValue title = 1;
+  google.protobuf.Timestamp date_event_start = 2;
+  google.protobuf.Timestamp date_event_finish = 3;
+  google.protobuf.StringValue message_event = 4;
+  int64 id_user = 5;
+  google.protobuf.Timestamp time_pre_event = 6;
+}
+
+message InfoEvent {
+  int64 id = 1;
+  string  title = 2;
+  google.protobuf.Timestamp date_event_start = 3;
+  google.protobuf.Timestamp date_event_finish = 4;
+  string message_event = 5;
+  int64 id_user = 6;
+  google.protobuf.Timestamp time_pre_event = 7;
+}
+
+message CreateEventRequest {
+    Event event = 1;
+}
+
+message CreateEventResponse {
+  int64 id = 1;
+}
+
+message UpdateEventRequest {
+  UpdateEvent event = 1;
+}
+
+message DeleteEventRequest {
+  int64 id = 1;
+}
+
+message GetListEventResponse {
+  repeated InfoEvent event = 1;
+}
+
+message GetListWeekEventRequest {
+  google.protobuf.Timestamp date_start_week = 1;
+}
+
+message GetListWeekEventResponse {
+  repeated InfoEvent event = 1;
+}
+
+
+message GetListMonthEventRequest {
+  google.protobuf.Timestamp date_start_month = 1;
+}
+
+message GetListMonthEventResponse {
+  repeated InfoEvent event = 1;
+}
