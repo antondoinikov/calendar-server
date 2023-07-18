@@ -7,9 +7,10 @@ import (
 	"net"
 	"sync"
 
+	"github.com/antondoinikov/calendar-server/hw12_13_14_15_calendar/internal/app/api/event_v1"
 	"github.com/antondoinikov/calendar-server/hw12_13_14_15_calendar/internal/config"
 	"github.com/antondoinikov/calendar-server/hw12_13_14_15_calendar/internal/version"
-	grpcValidator "github.com/grpc-ecosystem/go-grpc-middleware/validator"
+	desc "github.com/antondoinikov/calendar-server/hw12_13_14_15_calendar/pkg/event_v1"
 	"google.golang.org/grpc"
 )
 
@@ -34,10 +35,10 @@ func main() {
 	}
 	fmt.Printf("Config: %s \n", *config)
 	//logg := logger.New(config.Logger.LogLevel)
+	//logg.Info("Start")
 
-	grpcServer := grpc.NewServer(
-		grpc.UnaryInterceptor(grpcValidator.UnaryServerInterceptor()),
-	)
+	grpcServer := grpc.NewServer()
+	desc.RegisterEventV1Server(grpcServer, event_v1.NewEvent())
 
 	wg := sync.WaitGroup{}
 	wg.Add(1)

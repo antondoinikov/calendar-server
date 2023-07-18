@@ -1,10 +1,9 @@
-module github.com/fixme_my_friend/hw12_13_14_15_calendar
+module github.com/antondoinikov/calendar-server/hw12_13_14_15_calendar
 
 go 1.20
 
 require (
 	github.com/golang/protobuf v1.5.3
-	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20230711160842-782d3b101e98
 	google.golang.org/grpc v1.56.2
