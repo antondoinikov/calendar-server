@@ -8,7 +8,6 @@ package event_v1
 
 import (
 	context "context"
-	"github.com/antondoinikov/calendar-server/hw12_13_14_15_calendar/internal/app/api/event_v1"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -138,7 +137,7 @@ type UnsafeEventV1Server interface {
 	mustEmbedUnimplementedEventV1Server()
 }
 
-func RegisterEventV1Server(s grpc.ServiceRegistrar, srv *event_v1.Implementation) {
+func RegisterEventV1Server(s grpc.ServiceRegistrar, srv EventV1Server) {
 	s.RegisterService(&EventV1_ServiceDesc, srv)
 }
 

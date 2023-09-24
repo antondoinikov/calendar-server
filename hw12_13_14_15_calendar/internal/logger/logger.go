@@ -26,25 +26,25 @@ func New(level string) Logger {
 	return NoMessage
 }
 
-func (l Logger) Info(msg string) {
+func (l Logger) Info(msg ...any) {
 	if l == Info || l == Debug {
 		fmt.Println(msg)
 	}
 }
 
-func (l Logger) Warning(msg string) {
+func (l Logger) Warning(msg ...any) {
 	if l == Warning || l == Debug {
 		fmt.Println(msg)
 	}
 }
 
-func (l Logger) Error(msg string) {
+func (l Logger) Error(msg ...any) {
 	if l == Error || l == Debug {
 		fmt.Println(msg)
 	}
 }
 
-func (l Logger) Debug(msg string) {
+func (l Logger) Debug(msg ...any) {
 	if l == Debug {
 		fmt.Println(msg)
 	}

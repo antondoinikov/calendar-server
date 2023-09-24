@@ -9,6 +9,7 @@ import (
 
 	"github.com/antondoinikov/calendar-server/hw12_13_14_15_calendar/internal/app/api/event_v1"
 	"github.com/antondoinikov/calendar-server/hw12_13_14_15_calendar/internal/config"
+	"github.com/antondoinikov/calendar-server/hw12_13_14_15_calendar/internal/logger"
 	"github.com/antondoinikov/calendar-server/hw12_13_14_15_calendar/internal/version"
 	desc "github.com/antondoinikov/calendar-server/hw12_13_14_15_calendar/pkg/event_v1"
 	"google.golang.org/grpc"
@@ -34,8 +35,8 @@ func main() {
 		return
 	}
 	fmt.Printf("Config: %s \n", *config)
-	//logg := logger.New(config.Logger.LogLevel)
-	//logg.Info("Start")
+	logg := logger.New(config.Logger.LogLevel)
+	logg.Info("Logger run level: ", config.Logger.LogLevel)
 
 	grpcServer := grpc.NewServer()
 	desc.RegisterEventV1Server(grpcServer, event_v1.NewEvent())

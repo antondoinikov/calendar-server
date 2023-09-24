@@ -8,7 +8,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func (i *Implementation) GetListWeekEvent(ctx context.Context, req desc.GetListWeekEventRequest) (*desc.GetListWeekEventResponse, error) {
+func (i *Implementation) GetListWeekEvent(ctx context.Context, req *desc.GetListWeekEventRequest) (*desc.GetListWeekEventResponse, error) {
 	fmt.Println(req.GetDateStartWeek())
 	return &desc.GetListWeekEventResponse{
 		Event: []*desc.InfoEvent{

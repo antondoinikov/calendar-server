@@ -8,7 +8,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func (i *Implementation) GetListMonthEvent(ctx context.Context, req desc.GetListMonthEventRequest) (*desc.GetListMonthEventResponse, error) {
+func (i *Implementation) GetListMonthEvent(ctx context.Context, req *desc.GetListMonthEventRequest) (*desc.GetListMonthEventResponse, error) {
 	fmt.Println(req.GetDateStartMonth())
 	return &desc.GetListMonthEventResponse{
 		Event: []*desc.InfoEvent{

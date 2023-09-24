@@ -1,5 +1,7 @@
 BIN := "./bin/calendar"
 DOCKER_IMG="calendar:develop"
+LOCAL_MIGRATION_DIR=./migrations
+LOCAL_MIGRATION_DSN="host=localhost port=55321 dbname=note-service user=note-service-user password=note-service-password sslmode=disable"
 
 GIT_HASH := $(shell git log --format="%h" -n 1)
 LDFLAGS := -X main.release="develop" -X main.buildDate=$(shell date -u +%Y-%m-%dT%H:%M:%S) -X main.gitHash=$(GIT_HASH)
@@ -71,4 +73,20 @@ PHONY: .vendor-proto
 			mv vendor.protogen/protobuf/src/google/protobuf/*.proto vendor.protogen/google/protobuf &&\
 			rm -rf vendor.protogen/protobuf ;\
 		fi
+
+.PHONY: install-goose
+.install-goose:
+	go install github.com/pressly/goose/v3/cmd/goose@latest
+
+.PHONY: local-migration-status
+local-migration-status:
+	goose -dir ${LOCAL_MIGRATION_DIR} postgres ${LOCAL_MIGRATION_DSN} status -v
+
+.PHONY: local-migration-up
+local-migration-up:
+	goose -dir ${LOCAL_MIGRATION_DIR} postgres ${LOCAL_MIGRATION_DSN} up -v
+
+.PHONY: local-migration-down
+local-migration-down:
+	goose -dir ${LOCAL_MIGRATION_DIR} postgres ${LOCAL_MIGRATION_DSN} down -v
 
